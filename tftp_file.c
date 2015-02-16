@@ -113,8 +113,8 @@ int tftp_receive_file(struct client_data *data)
      int state = S_SEND_REQ;    /* current state in the state machine */
      int timeout_state = state; /* what state should we go on when timeout */
      int result;
-     int block_number = 0;
-     int last_block_number = -1;/* block number of last block for multicast */
+     long block_number = 0;
+     long last_block = -1;/* block number of last block for multicast */
      int data_size;             /* size of data received */
      int sockfd = data->sockfd; /* just to simplify calls */
      struct sockaddr_storage sa; /* a copy of data.sa_peer */
@@ -637,8 +637,8 @@ int tftp_send_file(struct client_data *data)
      int convert = 0;           /* if true, do netascii convertion */
      char string[MAXLEN];
 
-     int prev_block_number = 0; /* needed to support netascii convertion */
-     int prev_file_pos = 0;
+     long prev_block_number = 0; /* needed to support netascii convertion */
+     long prev_file_pos = 0;
      int temp = 0;
 
      data->file_size = 0;
@@ -745,7 +745,7 @@ int tftp_send_file(struct client_data *data)
                               data_size, data->data_buffer);
                data->file_size += data_size;
                if (data->trace)
-                    fprintf(stderr, "sent DATA <block: %d, size: %d>\n",
+                    fprintf(stderr, "sent DATA <block: %ld, size: %d>\n",
                             block_number + 1, data_size - 4);
                state = S_WAIT_PACKET;
                break;
@@ -785,7 +785,7 @@ int tftp_send_file(struct client_data *data)
                     }
                     block_number = ntohs(tftphdr->th_block);
                     if (data->trace)
-                         fprintf(stderr, "received ACK <block: %d>\n",
+                         fprintf(stderr, "received ACK <block: %ld>\n",
                                  block_number);
                     if ((last_block != -1) && (block_number > last_block))
                     {
