@@ -32,6 +32,7 @@
 #define TIMEOUT       5         /* Client timeout */
 #define S_TIMEOUT     5         /* Server timout. */
 #define NB_OF_RETRY   5
+#define MAXBLOCKS   500000      /* maximum number of blocks in a download */
 
 /* definition to use tftp_options structure */
 #define OPT_FILENAME  0
